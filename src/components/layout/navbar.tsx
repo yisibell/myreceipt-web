@@ -47,7 +47,9 @@ export function Navbar() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem disabled>设置（即将上线）</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push("/settings")}>
+                  设置
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>退出</DropdownMenuItem>
               </DropdownMenuContent>
