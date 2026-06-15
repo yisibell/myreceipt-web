@@ -21,6 +21,7 @@ interface ReimbursementState {
   analysisResult: ReimbursementAnalysis | ZipAnalysisOutput | null;
   error: string | null;
   analyzing: boolean;
+  exporting: boolean;
 
   // internal: AbortController for cancellation
   _abortController: AbortController | null;
@@ -47,6 +48,7 @@ export const useReimbursementStore = create<ReimbursementState>((set, get) => ({
   analysisResult: null,
   error: null,
   analyzing: false,
+  exporting: false,
   _abortController: null,
 
   setStep: (step) => set({ step }),
@@ -93,7 +95,7 @@ export const useReimbursementStore = create<ReimbursementState>((set, get) => ({
   async downloadResult() {
     const { mode, template, zipfile, analysisResult } = get();
     if (!analysisResult) return;
-    set({ step: 4 });
+    set({ error: null, exporting: true });
 
     try {
       let blob: Blob;
@@ -117,9 +119,11 @@ export const useReimbursementStore = create<ReimbursementState>((set, get) => ({
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+
+      set({ step: 4, exporting: false });
     } catch (err) {
       const message = err instanceof Error ? err.message : "导出失败";
-      set({ error: message, step: 3 });
+      set({ error: message, step: 3, exporting: false });
     }
   },
 
@@ -133,6 +137,7 @@ export const useReimbursementStore = create<ReimbursementState>((set, get) => ({
       analysisResult: null,
       error: null,
       analyzing: false,
+      exporting: false,
       _abortController: null,
     });
   },

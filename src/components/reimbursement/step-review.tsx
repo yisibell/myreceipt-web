@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Download, ArrowLeft } from "lucide-react";
+import { Download, ArrowLeft, Loader2 } from "lucide-react";
 import type { ReimbursementAnalysis, ZipAnalysisOutput } from "@/api/modules/reimbursement";
 
 export function StepReview() {
@@ -21,6 +21,7 @@ export function StepReview() {
     analysisResult,
     setStep,
     downloadResult,
+    exporting,
     error,
   } = useReimbursementStore();
 
@@ -105,8 +106,12 @@ export function StepReview() {
         <Button variant="outline" onClick={() => setStep(1)}>
           <ArrowLeft className="h-4 w-4 mr-1" /> 返回上传
         </Button>
-        <Button onClick={downloadResult} size="lg">
-          <Download className="h-4 w-4 mr-1" /> 导出
+        <Button onClick={downloadResult} size="lg" disabled={exporting}>
+          {exporting ? (
+            <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> 导出中...</>
+          ) : (
+            <><Download className="h-4 w-4 mr-1" /> 导出</>
+          )}
         </Button>
       </div>
     </div>

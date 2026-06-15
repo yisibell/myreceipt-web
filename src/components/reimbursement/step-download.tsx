@@ -2,10 +2,10 @@
 
 import { useReimbursementStore } from "@/stores/reimbursement-store";
 import { Button } from "@/components/ui/button";
-import { FileDown, RotateCw, ArrowLeft } from "lucide-react";
+import { FileDown, RotateCw, ArrowLeft, Loader2 } from "lucide-react";
 
 export function StepDownload() {
-  const { mode, analysisResult, setStep, downloadResult, reset } =
+  const { mode, analysisResult, setStep, downloadResult, exporting, reset } =
     useReimbursementStore();
 
   const isZip = mode === "zip";
@@ -29,9 +29,12 @@ export function StepDownload() {
         <Button variant="outline" onClick={() => setStep(3)}>
           <ArrowLeft className="h-4 w-4 mr-1" /> 返回预览编辑
         </Button>
-        <Button onClick={downloadResult}>
-          <FileDown className="h-4 w-4 mr-1" />
-          重新下载{isZip ? " ZIP" : " Excel"}
+        <Button onClick={downloadResult} disabled={exporting}>
+          {exporting ? (
+            <><Loader2 className="h-4 w-4 mr-1 animate-spin" /> 导出中...</>
+          ) : (
+            <><FileDown className="h-4 w-4 mr-1" />重新下载{isZip ? " ZIP" : " Excel"}</>
+          )}
         </Button>
       </div>
     </div>
